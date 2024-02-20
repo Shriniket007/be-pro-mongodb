@@ -23,10 +23,20 @@ app.use(express.urlencoded({ limit: "50mb", extended: true }));
 //   useUnifiedTopology: true,
 // });
 
-mongoose.connect(process.env.MONGO_URL);
-const db = mongoose.connection;
-db.on("error", console.error.bind(console, "MongoDB connection error:"));
-db.once("open", () => console.log("Connected to MongoDB"));
+// mongoose.connect(process.env.MONGO_URL);
+// const db = mongoose.connection;
+// db.on("error", console.error.bind(console, "MongoDB connection error:"));
+// db.once("open", () => console.log("Connected to MongoDB"));
+
+const connectDB = async () => {
+  try {
+    const conn = await mongoose.connect(process.env.MONGO_URL);
+    console.log(`MongoDB Connected: ${conn.connection.host}`);
+  } catch (error) {
+    console.log(error);
+    process.exit(1);
+  }
+};
 
 app.post("/register", async (req, res) => {
   try {
@@ -214,6 +224,11 @@ app.get("/getApprovedDocuments", async (req, res) => {
   }
 });
 
-app.listen(8700, () => {
-  console.log("Connected backend");
+// app.listen(8700, () => {
+//   console.log("Connected backend");
+// });
+connectDB().then(() => {
+  app.listen(3001, () => {
+    console.log("listening for requests");
+  });
 });

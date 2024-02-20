@@ -55,7 +55,7 @@ function UploadFile() {
 
   const uploadToIpfs = async (fileContent, fileName) => { 
     try {
-      const response = await axios.post("http://localhost:8700/uploadToIpfs", {
+      const response = await axios.post("https://zany-blue-ladybug-robe.cyclic.app/uploadToIpfs", {
         fileContent,
         userAadhar: user.Aadhar,
         fileName,

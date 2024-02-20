@@ -16,7 +16,7 @@ function Login() {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:8700/login", {
+      const response = await axios.post("https://zany-blue-ladybug-robe.cyclic.app/login", {
         Aadhar: aadharNumber,
         Password: password,
       });

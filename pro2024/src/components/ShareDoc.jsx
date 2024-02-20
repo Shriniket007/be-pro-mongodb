@@ -10,7 +10,7 @@ const ShareDoc = () => {
   const [requestHistory, setRequestHistory] = useState([]);
 
   const fetchRequestHistory = (aadhar) => {
-    fetch(`http://localhost:8700/getRequestHistory/${aadhar}`)
+    fetch(`https://zany-blue-ladybug-robe.cyclic.app/getRequestHistory/${aadhar}`)
       .then((response) => response.json())
       .then((data) => {
         setRequestHistory(data);
@@ -27,7 +27,7 @@ const ShareDoc = () => {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:8700/users")
+    fetch("https://zany-blue-ladybug-robe.cyclic.app/users")
       .then((response) => response.json())
       .then((res) => {
         setUsers(res);
@@ -39,7 +39,7 @@ const ShareDoc = () => {
 
   useEffect(() => {
     if (selectedUser) {
-      fetch(`http://localhost:8700/getDocuments/${selectedUser.Aadhar}`)
+      fetch(`https://zany-blue-ladybug-robe.cyclic.app/getDocuments/${selectedUser.Aadhar}`)
         .then((response) => response.json())
         .then((data) => {
           setUserDocuments(data);
@@ -67,7 +67,7 @@ const ShareDoc = () => {
         ownerAadhar: selectedDocument.aadhar,
       };
 
-      fetch("http://localhost:8700/requestAccess", {
+      fetch("https://zany-blue-ladybug-robe.cyclic.app/requestAccess", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -91,7 +91,7 @@ const ShareDoc = () => {
     requesterAadhar,
     documentId
   ) => {
-    fetch(`http://localhost:8700/updateRequestStatus/${requestId}`, {
+    fetch(`https://zany-blue-ladybug-robe.cyclic.app/updateRequestStatus/${requestId}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -108,7 +108,7 @@ const ShareDoc = () => {
             documentId: documentId,
           };
 
-          fetch("http://localhost:8700/storeApprovedRequest", {
+          fetch("https://zany-blue-ladybug-robe.cyclic.app/storeApprovedRequest", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
