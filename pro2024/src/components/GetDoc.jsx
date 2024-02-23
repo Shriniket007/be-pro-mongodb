@@ -12,14 +12,14 @@ const GetDoc = () => {
   const user = useSelector((state) => state.usersReducer.user);
 
   useEffect(() => {
-    fetch(`http://localhost:3001/getDocuments/${user.Aadhar}`)
+    fetch(`https://zany-blue-ladybug-robe.cyclic.app/getDocuments/${user.Aadhar}`)
       .then((response) => response.json())
       .then((data) => {
         setDocumentList(data);
       })
       .catch((error) => setError(error.message));
 
-    fetch("http://localhost:3001/getApprovedDocuments")
+    fetch("https://zany-blue-ladybug-robe.cyclic.app/getApprovedDocuments")
       .then((response) => response.json())
       .then((data) => {
         const userApprovedDocuments = data.filter(

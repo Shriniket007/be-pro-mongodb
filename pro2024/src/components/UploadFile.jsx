@@ -58,7 +58,7 @@ function UploadFile() {
       const file = fileInputRef.current.files[0];
       const fileSizeKB = file.size / 1000; 
 
-      const response = await axios.post("http://localhost:3001/uploadToIpfs", {
+      const response = await axios.post("https://zany-blue-ladybug-robe.cyclic.app/uploadToIpfs", {
         fileContent,
         userAadhar: user.Aadhar,
         fileName,
