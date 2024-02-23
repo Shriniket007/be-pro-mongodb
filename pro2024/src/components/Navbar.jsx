@@ -19,7 +19,7 @@ function Navbar() {
           <img 
             src={logos}
             alt="logo image"
-            className="w-80 h-30 "
+            className="w-60 h-25 "
             >
           </img>
         </Link>

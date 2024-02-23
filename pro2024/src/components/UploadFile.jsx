@@ -25,11 +25,10 @@ function UploadFile() {
         const fileContent = await readFileAsBase64(file);
         const response = await uploadToIpfs(fileContent, file.name);  // Pass the file name
   
-        console.log("File uploaded to IPFS:", response.ipfsPath);
+        alert("File uploaded to IPFS")
+        setSelectedDocument(response.ipfsPath)
       } catch (error) {
         console.error("Error uploading file:", error.message);
-
-      } finally {
 
       }
     } else {
@@ -39,8 +38,9 @@ function UploadFile() {
     }
   };
 
+  const [preview, setPreview] = useState(false)
   const handlePreview = () => {
-    // Your logic for previewing the selected document
+    setPreview(true)
     console.log("Previewing file");
   };
 
@@ -55,10 +55,14 @@ function UploadFile() {
 
   const uploadToIpfs = async (fileContent, fileName) => { 
     try {
-      const response = await axios.post("https://zany-blue-ladybug-robe.cyclic.app/uploadToIpfs", {
+      const file = fileInputRef.current.files[0];
+      const fileSizeKB = file.size / 1000; 
+
+      const response = await axios.post("http://localhost:3001/uploadToIpfs", {
         fileContent,
         userAadhar: user.Aadhar,
         fileName,
+        fileSizeKB
       });
       return response.data;
     } catch (error) {
@@ -101,7 +105,7 @@ function UploadFile() {
 
       <div className="col-span-5 h-500 p-2 bg-[#222831] text-[#EEEEEE] font-bold">
         <h1>Document Preview</h1>
-        {selectedDocument && (
+        {preview && selectedDocument && (
           <iframe
             src={selectedDocument.previewUrl}
             title="Document Preview"

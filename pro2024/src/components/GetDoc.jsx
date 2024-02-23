@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import aadhar from "../../src/images/aadhaar_pro.svg";
+import gmail from "../../src/images/gmail.svg";
+import phone from "../../src/images/phone.svg";
 
 const GetDoc = () => {
   const [selectedDocument, setSelectedDocument] = useState(null);
@@ -9,14 +12,14 @@ const GetDoc = () => {
   const user = useSelector((state) => state.usersReducer.user);
 
   useEffect(() => {
-    fetch(`https://zany-blue-ladybug-robe.cyclic.app/getDocuments/${user.Aadhar}`)
+    fetch(`http://localhost:3001/getDocuments/${user.Aadhar}`)
       .then((response) => response.json())
       .then((data) => {
         setDocumentList(data);
       })
       .catch((error) => setError(error.message));
 
-    fetch("https://zany-blue-ladybug-robe.cyclic.app/getApprovedDocuments")
+    fetch("http://localhost:3001/getApprovedDocuments")
       .then((response) => response.json())
       .then((data) => {
         const userApprovedDocuments = data.filter(
@@ -34,9 +37,9 @@ const GetDoc = () => {
     // console.log(document)
   };
 
-  const calculateFileSizeAndType = (file) => {
+  const calculateFilType = (file) => {
     if (!file) {
-      return { size: 'N/A', type: 'N/A' };
+      return { type: 'N/A' };
     }
   
     let fileType = 'N/A';
@@ -48,10 +51,8 @@ const GetDoc = () => {
         fileType = fileNameParts[fileNameParts.length - 1];
       }
     }
-
-    const fileSize = 'N/A'; // Add logic to calculate file size if needed
   
-    return { size: fileSize, type: fileType };
+    return { type: fileType };
   };
 
   return (
@@ -69,7 +70,7 @@ const GetDoc = () => {
           <div className="flex items-center mb-2">
             <p className="flex items-center">
               <span className="mr-4">
-                {/* <img src={gmail} className="w-10 h-15" alt="Gmail" /> */}
+                <img src={gmail} className="w-10 h-15" alt="Gmail" />
               </span>{" "}
               {user.Email}
             </p>
@@ -78,7 +79,7 @@ const GetDoc = () => {
           <div className="flex items-center mb-2">
             <p className="flex items-center">
               <span className="mr-4">
-                {/* <img src={aadhar} className="w-10 h-15" alt="Aadhar" /> */}
+                <img src={aadhar} className="w-10 h-15" alt="Aadhar" />
               </span>
               {user.Aadhar}
             </p>
@@ -87,7 +88,7 @@ const GetDoc = () => {
           <div className="flex items-center mb-2">
             <p className="flex items-center">
               <span className="mr-4">
-                {/* <img src={phone} className="w-10 h-15" alt="Phone" /> */}
+                <img src={phone} className="w-10 h-15" alt="Phone" />
               </span>
               {user.Telephone}
             </p>
@@ -104,7 +105,7 @@ const GetDoc = () => {
           {documentList.map((doc) => (
             <li
               key={doc._id}
-              onClick={() => handleDocumentSelect(doc.ipfsPath)}
+              onClick={() => handleDocumentSelect(doc)}
               className=" cursor-pointer bg-[#393E46] p-2 rounded-md"
             >
               {doc.name}
@@ -119,15 +120,15 @@ const GetDoc = () => {
           <h1 className=" font-bold">Document Preview</h1>
         </div>
         {selectedDocument && (
-  <iframe
-    src={selectedDocument}
-    title="Document Preview"
-    width="100%"
-    height="85%"
-    style={{ border: "none" }}
-    scrolling="auto"
-  ></iframe>
-)}
+          <iframe
+            src={selectedDocument.ipfsPath}
+            title="Document Preview"
+            width="100%"
+            height="85%"
+            style={{ border: "none" }}
+            scrolling="auto"
+          ></iframe>
+        )}
 
       </div>
 
@@ -138,9 +139,9 @@ const GetDoc = () => {
         </div>
         {selectedDocument && (
           <div className="bg-[#393E46] p-2 rounded-md">
-            <p>Uploaded Date: {selectedDocument.uploadedDate}</p>
-            <p>Size: {selectedDocument.size}</p>
-            <p>Type: {selectedDocument.type}</p>
+            <p>Uploaded Date: {selectedDocument.uploadDatetime}</p>
+            <p>Size: {selectedDocument.fileSizeKB}</p>
+            <p>Type: {calculateFilType(selectedDocument).type}</p>
           </div>
         )}
       </div>
@@ -154,7 +155,7 @@ const GetDoc = () => {
           {approvedDocuments.map((doc) => (
             <li
               key={doc.documentId.aadhar} // Use a unique key
-              onClick={() => handleDocumentSelect(doc.documentId.ipfsPath)}
+              onClick={() => handleDocumentSelect(doc.documentId)}
               className=" cursor-pointer bg-[#393E46] p-2 rounded-md"
             >
               {doc.documentId.name} {/* Display document name */}

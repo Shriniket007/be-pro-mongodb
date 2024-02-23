@@ -3,6 +3,14 @@ const Schema = mongoose.Schema;
 
 const documentAccessRequestSchema = new Schema(
   {
+    requestName: {
+      type: String,
+      required: true,
+    },
+    documentName: {
+      type: String,
+      required: true,
+    },
     requesterAadhar: {
       type: String,
       required: true,

@@ -3,6 +3,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link,useNavigate } from 'react-router-dom';
 import { userSignOut } from '../redux/Users';
+import logos from '../images/logo1.png';
 
 function Navbar1() {
   const dispatch = useDispatch();
@@ -22,9 +23,12 @@ function Navbar1() {
       {/* Left side buttons */}
       <div className="flex items-center space-x-4">
         <Link to="/">
-          <button className="bg-[#00ADB5] text-[#EEEEEE] font-bold px-4 py-2 rounded">
-            LOGO
-          </button>
+        <img 
+            src={logos}
+            alt="logo image"
+            className="w-60 h-25 "
+            >
+          </img>
         </Link>
         <Link to="/UploadFile">
           <button className="bg-[#00ADB5] text-[#EEEEEE] font-bold px-4 py-2 rounded">

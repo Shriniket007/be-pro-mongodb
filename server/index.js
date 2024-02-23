@@ -84,6 +84,7 @@ app.post("/login", async (req, res) => {
 
 app.post("/uploadToIpfs", async (req, res) => {
   const fileContent = req.body.fileContent;
+  const fileSizeKB = req.body.fileSizeKB;
 
   const fileUpload = [
     {
@@ -105,6 +106,7 @@ app.post("/uploadToIpfs", async (req, res) => {
       aadhar: req.body.userAadhar,
       name: req.body.fileName,
       ipfsPath,
+      fileSizeKB
     });
 
     await documentPath.save();
@@ -141,13 +143,15 @@ app.get("/documentPaths", async (req, res) => {
 });
 
 app.post("/requestAccess", async (req, res) => {
-  const { requesterAadhar, documentId, ownerAadhar } = req.body;
+  const { requesterAadhar, documentId, ownerAadhar, requestName, documentName } = req.body;
 
   try {
     const request = new DocumentAccessRequest({
       requesterAadhar,
       documentId,
       ownerAadhar,
+      requestName,
+      documentName
     });
     await request.save();
 

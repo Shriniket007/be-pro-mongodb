@@ -4,6 +4,7 @@ import {useNavigate} from 'react-router-dom'
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { setUserInfo } from "../redux/Users";
+import logos from '../images/logo1.png';
 
 function Login() {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ function Login() {
     e.preventDefault();
 
     try {
-      const response = await axios.post("https://zany-blue-ladybug-robe.cyclic.app/login", {
+      const response = await axios.post("http://localhost:3001/login", {
         Aadhar: aadharNumber,
         Password: password,
       });
@@ -38,7 +39,11 @@ function Login() {
     <div className="min-h-screen flex flex-col items-center bg-[#1E1E1E]">
       <div className="w-3/4 m-auto rounded-lg bg-[#393E46] drop-shadow-md">
         <h2 className="flex justify-center p-6 text-[#00ADB5] font-bold text-2xl">
-          Site name | Login
+        <img 
+            src={logos}
+            alt="logo image"
+            className="w-40 h-15"
+            /> | Login
         </h2>
         <form onSubmit={handleSubmit} className="p-4">
           <div className="grid grid-cols-1 gap-4 md:grid md:grid-cols-2 md:gap-16">
@@ -78,3 +83,5 @@ function Login() {
 }
 
 export default Login;
+
+
