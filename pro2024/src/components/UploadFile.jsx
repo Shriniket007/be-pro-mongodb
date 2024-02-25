@@ -14,22 +14,19 @@ function UploadFile() {
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
-  
+
     if (file) {
       console.log(`Uploading file: ${file.name}`);
       setUploadedFileName(file.name);
-  
+
       try {
-       
-  
         const fileContent = await readFileAsBase64(file);
-        const response = await uploadToIpfs(fileContent, file.name);  // Pass the file name
-  
-        alert("File uploaded to IPFS")
-        setSelectedDocument(response.ipfsPath)
+        const response = await uploadToIpfs(fileContent, file.name); // Pass the file name
+
+        alert("File uploaded to IPFS");
+        setSelectedDocument(response.ipfsPath);
       } catch (error) {
         console.error("Error uploading file:", error.message);
-
       }
     } else {
       console.log("No file selected");
@@ -38,9 +35,9 @@ function UploadFile() {
     }
   };
 
-  const [preview, setPreview] = useState(false)
+  const [preview, setPreview] = useState(false);
   const handlePreview = () => {
-    setPreview(true)
+    setPreview(true);
     console.log("Previewing file");
   };
 
@@ -53,24 +50,25 @@ function UploadFile() {
     });
   };
 
-  const uploadToIpfs = async (fileContent, fileName) => { 
+  const uploadToIpfs = async (fileContent, fileName) => {
     try {
       const file = fileInputRef.current.files[0];
-      const fileSizeKB = file.size / 1000; 
+      const fileSizeKB = file.size / 1000;
 
-      const response = await axios.post("https://zany-blue-ladybug-robe.cyclic.app/uploadToIpfs", {
-        fileContent,
-        userAadhar: user.Aadhar,
-        fileName,
-        fileSizeKB
-      });
+      const response = await axios.post(
+        "https://zany-blue-ladybug-robe.cyclic.app/uploadToIpfs",
+        {
+          fileContent,
+          userAadhar: user.Aadhar,
+          fileName,
+          fileSizeKB,
+        }
+      );
       return response.data;
     } catch (error) {
       throw new Error("Error uploading to IPFS");
     }
   };
-  
-
 
   return (
     <div className="grid grid-cols-10 gap-4 h-screen pt-4 pb-4 bg-[#1A2027]">

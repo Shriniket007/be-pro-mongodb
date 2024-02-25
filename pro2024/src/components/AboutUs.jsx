@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import icon1 from '../../src/images/aadhaar.svg'
-import icon2 from '../../src/images/compliant.png'
-import icon3 from '../../src/images/folder.png'
-import icon4 from '../../src/images/blockchain.png'
+import icon1 from "../../src/images/aadhaar.svg";
+import icon2 from "../../src/images/compliant.png";
+import icon3 from "../../src/images/folder.png";
+import icon4 from "../../src/images/blockchain.png";
 
 function AboutUs() {
   return (
@@ -46,9 +46,8 @@ function AboutUs() {
         Our Services
       </h1>
 
-      
       <div className="flex justify-center mb-12">
-      <div className="mx-6 text-center">
+        <div className="mx-6 text-center">
           <img
             src={icon2}
             alt="Icon 2"
@@ -68,7 +67,7 @@ function AboutUs() {
             Authentication using Aadhar
           </p>
         </div>
-        
+
         <div className="mx-6 text-center">
           <img
             src={icon3}
@@ -90,9 +89,7 @@ function AboutUs() {
             Blockchain technology
           </p>
         </div>
-        
-        
-      </div> 
+      </div>
 
       <div className=" p-8 bg-[#1E1E1E] shadow-md rounded-md">
         <h1 className="text-3xl font-bold mb-4 text-gray-300">
@@ -106,10 +103,9 @@ function AboutUs() {
           <button className="bg-teal-500 text-white py-2 px-4 rounded-md font-bold border-light-blue-700 hover:bg-light-blue-700 transition duration-300 ease-in-out">
             <Link to="/contact"> Contact Us</Link>
           </button>
-          
-          <button className="bg-teal-500 text-white py-2 px-4 rounded-md font-bold border-light-blue-700 hover:bg-light-blue-700 transition duration-300 ease-in-out">
-          <Link to="/register"> Sign Up</Link>
 
+          <button className="bg-teal-500 text-white py-2 px-4 rounded-md font-bold border-light-blue-700 hover:bg-light-blue-700 transition duration-300 ease-in-out">
+            <Link to="/register"> Sign Up</Link>
           </button>
         </div>
       </div>
@@ -118,4 +114,3 @@ function AboutUs() {
 }
 
 export default AboutUs;
-

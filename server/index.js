@@ -82,6 +82,33 @@ app.post("/login", async (req, res) => {
   }
 });
 
+app.post("/change-password", async (req, res) => {
+  const { Aadhar, oldPassword, newPassword } = req.body;
+
+  try {
+    const user = await User.findOne({ Aadhar });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const match = await bcrypt.compare(oldPassword, user.Password);
+
+    if (!match) {
+      return res.status(401).json({ error: "Invalid old password" });
+    }
+
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+    user.Password = hashedNewPassword;
+    await user.save();
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error("Error during password change:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 app.post("/uploadToIpfs", async (req, res) => {
   const fileContent = req.body.fileContent;
   const fileSizeKB = req.body.fileSizeKB;
@@ -106,7 +133,7 @@ app.post("/uploadToIpfs", async (req, res) => {
       aadhar: req.body.userAadhar,
       name: req.body.fileName,
       ipfsPath,
-      fileSizeKB
+      fileSizeKB,
     });
 
     await documentPath.save();
@@ -143,7 +170,13 @@ app.get("/documentPaths", async (req, res) => {
 });
 
 app.post("/requestAccess", async (req, res) => {
-  const { requesterAadhar, documentId, ownerAadhar, requestName, documentName } = req.body;
+  const {
+    requesterAadhar,
+    documentId,
+    ownerAadhar,
+    requestName,
+    documentName,
+  } = req.body;
 
   try {
     const request = new DocumentAccessRequest({
@@ -151,7 +184,7 @@ app.post("/requestAccess", async (req, res) => {
       documentId,
       ownerAadhar,
       requestName,
-      documentName
+      documentName,
     });
     await request.save();
 
@@ -216,7 +249,7 @@ app.get("/getApprovedDocuments", async (req, res) => {
     const approvedDocuments = await ApprovedRequest.find({})
       .populate({
         path: "documentId",
-        model: "DocumentPath", 
+        model: "DocumentPath",
         select: "-_id -__v",
       })
       .select("-_id id requesterAadhar approvalDate document");

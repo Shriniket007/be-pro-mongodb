@@ -12,7 +12,9 @@ const GetDoc = () => {
   const user = useSelector((state) => state.usersReducer.user);
 
   useEffect(() => {
-    fetch(`https://zany-blue-ladybug-robe.cyclic.app/getDocuments/${user.Aadhar}`)
+    fetch(
+      `https://zany-blue-ladybug-robe.cyclic.app/getDocuments/${user.Aadhar}`
+    )
       .then((response) => response.json())
       .then((data) => {
         setDocumentList(data);
@@ -39,19 +41,19 @@ const GetDoc = () => {
 
   const calculateFilType = (file) => {
     if (!file) {
-      return { type: 'N/A' };
+      return { type: "N/A" };
     }
-  
-    let fileType = 'N/A';
+
+    let fileType = "N/A";
     if (file.type) {
       fileType = file.type;
     } else {
-      const fileNameParts = file.name.split('.');
+      const fileNameParts = file.name.split(".");
       if (fileNameParts.length > 1) {
         fileType = fileNameParts[fileNameParts.length - 1];
       }
     }
-  
+
     return { type: fileType };
   };
 
@@ -129,7 +131,6 @@ const GetDoc = () => {
             scrolling="auto"
           ></iframe>
         )}
-
       </div>
 
       {/* Document Details */}
@@ -140,7 +141,7 @@ const GetDoc = () => {
         {selectedDocument && (
           <div className="bg-[#393E46] p-2 rounded-md">
             <p>Uploaded Date: {selectedDocument.uploadDatetime}</p>
-            <p>Size: {selectedDocument.fileSizeKB}</p>
+            <p>Size: {selectedDocument.fileSizeKB} KB</p>
             <p>Type: {calculateFilType(selectedDocument).type}</p>
           </div>
         )}

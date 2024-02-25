@@ -118,7 +118,9 @@ const ContactForm = () => {
             onSubmit={handleSubmit}
             className="w-full max-w-md p-4 bg-gray-800 shadow-md border rounded"
           >
-            <h2 className="text-2xl font-bold mb-8 text-teal-500 text-center">Contact Us</h2>
+            <h2 className="text-2xl font-bold mb-8 text-teal-500 text-center">
+              Contact Us
+            </h2>
             <div className="mb-4">
               <label
                 htmlFor="fullName"

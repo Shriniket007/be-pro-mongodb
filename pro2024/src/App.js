@@ -10,8 +10,9 @@ import UploadFile from "./components/UploadFile";
 import Navbar1 from "./components/Navbar1";
 import GetDoc from "./components/GetDoc";
 import AboutUs from "./components/AboutUs";
-import ContactUs from './components/ContactUs';
+import ContactUs from "./components/ContactUs";
 import { useSelector } from "react-redux";
+import ChangePassword from "./components/ChangePassword";
 
 function App() {
   const user = useSelector((state) => state.usersReducer.user);
@@ -32,6 +33,7 @@ function App() {
             <Route path="/get_docs" element={<GetDoc />} />
             <Route path="/share_docs" element={<ShareDoc />} />
             <Route path="/contact" element={<ContactUs />} />
+            <Route path="/changepassword" element={<ChangePassword />} />
           </Routes>
         </div>
         <Footer />

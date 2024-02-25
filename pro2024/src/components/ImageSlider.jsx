@@ -12,7 +12,6 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 const ImageSlider = () => {
- 
   const responsive = {
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
@@ -33,9 +32,7 @@ const ImageSlider = () => {
     height: 650,
   });
 
-
   return (
- 
     <Carousel
       responsive={responsive}
       dotListClass="custom-dot-list-style"

@@ -1,26 +1,28 @@
 import React from "react";
 import { useState } from "react";
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { setUserInfo } from "../redux/Users";
-import logos from '../images/logo1.png';
+import logos from "../images/logo1.png";
 
 function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [aadharNumber, setAadharNumber] = useState("");
   const [password, setPassword] = useState("");
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("https://zany-blue-ladybug-robe.cyclic.app/login", {
-        Aadhar: aadharNumber,
-        Password: password,
-      });
+      const response = await axios.post(
+        "https://zany-blue-ladybug-robe.cyclic.app/login",
+        {
+          Aadhar: aadharNumber,
+          Password: password,
+        }
+      );
 
       if (response.data.success) {
         alert("Login Successful");
@@ -39,11 +41,7 @@ function Login() {
     <div className="min-h-screen flex flex-col items-center bg-[#1E1E1E]">
       <div className="w-3/4 m-auto rounded-lg bg-[#393E46] drop-shadow-md">
         <h2 className="flex justify-center p-6 text-[#00ADB5] font-bold text-2xl">
-        <img 
-            src={logos}
-            alt="logo image"
-            className="w-40 h-15"
-            /> | Login
+          <img src={logos} alt="logo image" className="w-40 h-15" /> | Login
         </h2>
         <form onSubmit={handleSubmit} className="p-4">
           <div className="grid grid-cols-1 gap-4 md:grid md:grid-cols-2 md:gap-16">
@@ -77,11 +75,11 @@ function Login() {
           </button>
         </form>
       </div>
-      <p className="text-center text-[#FFFFFF] font-bold mb-2">Forgot password?</p>
+      <p className="text-center text-[#FFFFFF] font-bold mb-2">
+        Forgot password?
+      </p>
     </div>
   );
 }
 
 export default Login;
-
-

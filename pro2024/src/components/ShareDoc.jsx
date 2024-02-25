@@ -13,10 +13,13 @@ const ShareDoc = () => {
   // console.log(selectedDocument?.name)
 
   const fetchRequestHistory = (aadhar) => {
-    fetch(`https://zany-blue-ladybug-robe.cyclic.app/getRequestHistory/${aadhar}`)
+    fetch(
+      `https://zany-blue-ladybug-robe.cyclic.app/getRequestHistory/${aadhar}`
+    )
       .then((response) => response.json())
       .then((data) => {
         setRequestHistory(data);
+        console.log(data);
       })
       .catch((error) => {
         console.error("Error fetching request history:", error);
@@ -42,7 +45,9 @@ const ShareDoc = () => {
 
   useEffect(() => {
     if (selectedUser) {
-      fetch(`https://zany-blue-ladybug-robe.cyclic.app/getDocuments/${selectedUser.Aadhar}`)
+      fetch(
+        `https://zany-blue-ladybug-robe.cyclic.app/getDocuments/${selectedUser.Aadhar}`
+      )
         .then((response) => response.json())
         .then((data) => {
           setUserDocuments(data);
@@ -69,8 +74,7 @@ const ShareDoc = () => {
         documentId: selectedDocument._id,
         ownerAadhar: selectedDocument.aadhar,
         requestName: currentUser.fullName,
-        documentName: selectedDocument.name
-
+        documentName: selectedDocument.name,
       };
 
       fetch("https://zany-blue-ladybug-robe.cyclic.app/requestAccess", {
@@ -97,13 +101,16 @@ const ShareDoc = () => {
     requesterAadhar,
     documentId
   ) => {
-    fetch(`https://zany-blue-ladybug-robe.cyclic.app/updateRequestStatus/${requestId}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ status }),
-    })
+    fetch(
+      `https://zany-blue-ladybug-robe.cyclic.app/updateRequestStatus/${requestId}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status }),
+      }
+    )
       .then((response) => response.json())
       .then((data) => {
         console.log("Request status updated successfully:", data);
@@ -114,13 +121,16 @@ const ShareDoc = () => {
             documentId: documentId,
           };
 
-          fetch("https://zany-blue-ladybug-robe.cyclic.app/storeApprovedRequest", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(requestData),
-          })
+          fetch(
+            "https://zany-blue-ladybug-robe.cyclic.app/storeApprovedRequest",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(requestData),
+            }
+          )
             .then((response) => response.json())
             .then((storeData) => {
               console.log(
@@ -143,128 +153,126 @@ const ShareDoc = () => {
 
   return (
     <div className="flex h-fit bg-[#1A2027]">
-    <div className="w-1/3 p-8 border-r border-gray-600">
-      <div className=" bg-[#00ADB5] rounded-md font-bold p-2 mb-2">
-        <h1 className=" font-bold text-white">Users</h1>
-      </div>
-      <div className="bg-[#393E46] rounded-md p-2">
-        <ul className="">
-          {users.map(
-            (user) =>
-              user.Aadhar !== currentUser.Aadhar && (
-                <li
-                  className="text-white font-bold cursor-pointer bg-[#515863] p-2 rounded-md mt-2 mb-2"
-                  key={user.Aadhar}
-                  onClick={() => handleUserSelection(user)}
-                >
-                  {user.fullName}
-                </li>
-              )
-          )}
-        </ul>
-      </div>
-    </div>
-    <div className="w-1/3 p-8 border-r border-l border-gray-600">
-      <div className="text-white bg-[#00ADB5] rounded-md font-bold p-2 mb-2">
-        <h1 className=" font-bold">User Documents</h1>
-      </div>
-      <ul className="mt-4">
-        {userDocuments.map((document) => (
-          <li
-            className="text-white font-bold cursor-pointer bg-[#393E46] p-2 rounded-md mb-2"
-            key={document._id}
-            onClick={() => handleDocumentSelection(document)}
-          >
-            {document.name}
-          </li>
-        ))}
-      </ul>
-    </div>
-    <div className="flex flex-col p-8 w-1/3 border-l border-gray-600">
-      <div className="text-white bg-[#00ADB5] rounded-md font-bold p-2 mb-2">
-        <h1 className=" font-bold">Document requests</h1>
-      </div>
-      
-      <div className="flex flex-col ">
-        <div className="p-4 bg-[#393E46] text-white rounded-md mb-2">
-          <p>
-            <span className="font-bold">Username:</span>{" "}
-            {selectedUser ? selectedUser.fullName : "-"}
-          </p>
-          <p>
-            <span className="font-bold">Document Name:</span>{" "}
-            {selectedDocument ? selectedDocument.name : "-"}
-          </p>
-          {selectedUser && selectedDocument && (
-            <button
-              className="mt-4 bg-blue-500 text-white p-2 rounded font-bold"
-              onClick={handleRequestAccess}
-            >
-              Request Access
-            </button>
-          )}
+      <div className="w-1/3 p-8 border-r border-gray-600">
+        <div className=" bg-[#00ADB5] rounded-md font-bold p-2 mb-2">
+          <h1 className=" font-bold text-white">Users</h1>
         </div>
-        <div className="p-2 rounded-md bg-[#393E46]">
-          <div className=" text-white bg-[#00ADB5] rounded-md font-bold p-2 mb-2">
-            <h1 className=" font-bold">Requests History</h1>
-          </div>
-          <ul>
-            {requestHistory.map((request) => (
-              <li
-                className="text-white font-bold bg-[#515863] rounded-md mt-2 mb-2 p-2"
-                key={request._id}
-              >
-                Requester's name: {request.requestName} <br /> Document name:{" "}
-                   {request.documentName}
-                {request.status === "pending" && (
-                  <div className="mt-2">
-                    <button
-                      className="bg-green-500 text-white px-2 py-1 rounded mr-2"
-                      onClick={() =>
-                        handleStatusChange(
-                          request._id,
-                          "approved",
-                          request.requesterAadhar,
-                          request.documentId
-                        )
-                      }
-                    >
-                      Approve
-                    </button>
-                    <button
-                      className="bg-red-500 text-white px-2 py-1 rounded"
-                      onClick={() =>
-                        handleStatusChange(
-                          request._id,
-                          "rejected",
-                          request.requesterAadhar,
-                          request.documentId
-                        )
-                      }
-                    >
-                      Reject
-                    </button>
-                  </div>
-                )}
-                {request.status === "approved" && (
-                  <p className="text-green-500">Status: Approved</p>
-                )}
-                {request.status === "rejected" && (
-                  <p className="text-red-500">Status: Rejected</p>
-                )}
-              </li>
-            ))}
+        <div className="bg-[#393E46] rounded-md p-2">
+          <ul className="">
+            {users.map(
+              (user) =>
+                user.Aadhar !== currentUser.Aadhar && (
+                  <li
+                    className="text-white font-bold cursor-pointer bg-[#515863] p-2 rounded-md mt-2 mb-2"
+                    key={user.Aadhar}
+                    onClick={() => handleUserSelection(user)}
+                  >
+                    {user.fullName}
+                  </li>
+                )
+            )}
           </ul>
         </div>
       </div>
+      <div className="w-1/3 p-8 border-r border-l border-gray-600">
+        <div className="text-white bg-[#00ADB5] rounded-md font-bold p-2 mb-2">
+          <h1 className=" font-bold">User Documents</h1>
+        </div>
+        <ul className="mt-4">
+          {userDocuments.map((document) => (
+            <li
+              className="text-white font-bold cursor-pointer bg-[#393E46] p-2 rounded-md mb-2"
+              key={document._id}
+              onClick={() => handleDocumentSelection(document)}
+            >
+              {document.name}
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className="flex flex-col p-8 w-1/3 border-l border-gray-600">
+        <div className="text-white bg-[#00ADB5] rounded-md font-bold p-2 mb-2">
+          <h1 className=" font-bold">Document requests</h1>
+        </div>
+
+        <div className="flex flex-col ">
+          <div className="p-4 bg-[#393E46] text-white rounded-md mb-2">
+            <p>
+              <span className="font-bold">Username:</span>{" "}
+              {selectedUser ? selectedUser.fullName : "-"}
+            </p>
+            <p>
+              <span className="font-bold">Document Name:</span>{" "}
+              {selectedDocument ? selectedDocument.name : "-"}
+            </p>
+            {selectedUser && selectedDocument && (
+              <button
+                className="mt-4 bg-blue-500 text-white p-2 rounded font-bold"
+                onClick={handleRequestAccess}
+              >
+                Request Access
+              </button>
+            )}
+          </div>
+          <div className="p-2 rounded-md bg-[#393E46]">
+            <div className=" text-white bg-[#00ADB5] rounded-md font-bold p-2 mb-2">
+              <h1 className=" font-bold">Requests History</h1>
+            </div>
+            <ul>
+              {requestHistory.map((request) => (
+                <li
+                  className="text-white font-bold bg-[#515863] rounded-md mt-2 mb-2 p-2"
+                  key={request._id}
+                >
+                  Requester's name: {request.requestName} <br /> Document name:{" "}
+                  {request.documentName}
+                  {request.status === "pending" && (
+                    <div className="mt-2">
+                      <button
+                        className="bg-green-500 text-white px-2 py-1 rounded mr-2"
+                        onClick={() =>
+                          handleStatusChange(
+                            request._id,
+                            "approved",
+                            request.requesterAadhar,
+                            request.documentId
+                          )
+                        }
+                      >
+                        Approve
+                      </button>
+                      <button
+                        className="bg-red-500 text-white px-2 py-1 rounded"
+                        onClick={() =>
+                          handleStatusChange(
+                            request._id,
+                            "rejected",
+                            request.requesterAadhar,
+                            request.documentId
+                          )
+                        }
+                      >
+                        Reject
+                      </button>
+                    </div>
+                  )}
+                  {request.status === "approved" && (
+                    <p className="text-green-500">Status: Approved</p>
+                  )}
+                  {request.status === "rejected" && (
+                    <p className="text-red-500">Status: Rejected</p>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
   );
 };
 
 export default ShareDoc;
-
-
 
 // import React, { useState, useEffect } from "react";
 // import { useSelector } from "react-redux";
@@ -440,7 +448,7 @@ export default ShareDoc;
 //           {userDocuments.map((document) => (
 //             <li
 //               className="text-white font-bold cursor-pointer bg-[#393E46] p-2 rounded-md mb-2"
-//               key={document._id} 
+//               key={document._id}
 //               onClick={() => handleDocumentSelection(document)}
 //             >
 //               {document.name}
@@ -452,7 +460,7 @@ export default ShareDoc;
 //         <div className="text-white bg-[#00ADB5] rounded-md font-bold p-2 mb-2">
 //           <h1 className=" font-bold">Document requests</h1>
 //         </div>
-        
+
 //         <div className="flex flex-col ">
 //           <div className="p-4 bg-[#393E46] text-white rounded-md mb-2">
 //             <p>
@@ -480,7 +488,7 @@ export default ShareDoc;
 //               {requestHistory.map((request) => (
 //                 <li
 //                   className="text-white font-bold bg-[#515863] rounded-md mt-2 mb-2 p-2"
-//                   key={request._id} 
+//                   key={request._id}
 //                 >
 //                   Requester's name: {request.requestName} <br /> Document name:{" "}
 //                   {request.documentName}
@@ -531,4 +539,3 @@ export default ShareDoc;
 // };
 
 // export default ShareDoc;
-

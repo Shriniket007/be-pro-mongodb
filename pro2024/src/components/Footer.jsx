@@ -1,7 +1,7 @@
-import React from 'react'
-import { Link } from 'react-router-dom';
-import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa'; // Import icons as needed
-import logos from '../images/logo1.png';
+import React from "react";
+import { Link } from "react-router-dom";
+import { FaFacebook, FaTwitter, FaInstagram } from "react-icons/fa"; // Import icons as needed
+import logos from "../images/logo1.png";
 
 function Footer() {
   return (
@@ -11,20 +11,17 @@ function Footer() {
         <div className="text-4xl font-bold mb-2">
           {/* Make the logo a Link */}
           <Link to="/">
-          <img 
-            src={logos}
-            alt="logo image"
-            className="w-80 h-30 "
-            >
-          </img>
+            <img src={logos} alt="logo image" className="w-80 h-30 "></img>
           </Link>
         </div>
 
         {/* Description in the middle */}
-        <div className="text-gray-100 text-center text-justify w-1/3"> {/* Set a fixed width */}
-          Revolutionizing document storage with blockchain for secure, accessible data. 
-          Experience the future of decentralized management with privacy at its core.
-          Your documents, your control.
+        <div className="text-gray-100 text-justify w-1/3">
+          {" "}
+          {/* Set a fixed width */}
+          Revolutionizing document storage with blockchain for secure,
+          accessible data. Experience the future of decentralized management
+          with privacy at its core. Your documents, your control.
         </div>
 
         {/* Social Media Icons and Navigation Links on the right */}
@@ -51,25 +48,34 @@ function Footer() {
           {/* Navigation Links */}
           <ul className="flex space-x-4">
             <li>
-              <Link to="/" className="text-teal-500">Home</Link>
+              <Link to="/" className="text-teal-500">
+                Home
+              </Link>
             </li>
             <li>
-              <Link to="/about" className="text-teal-500">About Us</Link>
+              <Link to="/about" className="text-teal-500">
+                About Us
+              </Link>
             </li>
-            
+
             <li>
-              <Link to="/services" className="text-teal-500">Services</Link>
+              <Link to="/services" className="text-teal-500">
+                Services
+              </Link>
             </li>
             <li>
-              <Link to="/contact" className="text-teal-500">Contact Us</Link>
+              <Link to="/contact" className="text-teal-500">
+                Contact Us
+              </Link>
             </li>
           </ul>
-
         </div>
       </div>
-      <div className="mt-4 text-center text-gray-300 text-lg">© Copyright Crypt Drive 2024. All Rights Reserved</div>
+      <div className="mt-4 text-center text-gray-300 text-lg">
+        © Copyright Crypt Drive 2024. All Rights Reserved
+      </div>
     </footer>
-  )
+  );
 }
 
-export default Footer
+export default Footer;
