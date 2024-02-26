@@ -16,13 +16,10 @@ function Login() {
     e.preventDefault();
 
     try {
-      const response = await axios.post(
-        "https://zany-blue-ladybug-robe.cyclic.app/login",
-        {
-          Aadhar: aadharNumber,
-          Password: password,
-        }
-      );
+      const response = await axios.post("http://localhost:3001/login", {
+        Aadhar: aadharNumber,
+        Password: password,
+      });
 
       if (response.data.success) {
         alert("Login Successful");

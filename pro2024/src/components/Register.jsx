@@ -24,7 +24,7 @@ function Register() {
   const handleClick = async () => {
     try {
       const response = await axios.post(
-        "https://zany-blue-ladybug-robe.cyclic.app/register",
+        "http://localhost:3001/register",
         userProfile
       );
 

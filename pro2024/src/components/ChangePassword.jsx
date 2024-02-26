@@ -37,7 +37,7 @@ const ChangePassword = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center bg-[#1E1E1E]">
-      <div className="w-3/4 m-auto rounded-lg bg-[#393E46] drop-shadow-md">
+      <div className="w-2/4 m-auto rounded-lg bg-[#393E46] drop-shadow-md">
         <h2 className="flex justify-center p-6 text-[#00ADB5] font-bold text-2xl">
           <img src={logos} alt="logo image" className="w-40 h-15" /> | Change
           Password

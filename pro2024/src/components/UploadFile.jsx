@@ -55,15 +55,12 @@ function UploadFile() {
       const file = fileInputRef.current.files[0];
       const fileSizeKB = file.size / 1000;
 
-      const response = await axios.post(
-        "https://zany-blue-ladybug-robe.cyclic.app/uploadToIpfs",
-        {
-          fileContent,
-          userAadhar: user.Aadhar,
-          fileName,
-          fileSizeKB,
-        }
-      );
+      const response = await axios.post("http://localhost:3001/uploadToIpfs", {
+        fileContent,
+        userAadhar: user.Aadhar,
+        fileName,
+        fileSizeKB,
+      });
       return response.data;
     } catch (error) {
       throw new Error("Error uploading to IPFS");
