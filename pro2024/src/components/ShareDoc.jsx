@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { baseURL } from "../App";
 
 const ShareDoc = () => {
   const currentUser = useSelector((state) => state.usersReducer.user);
@@ -13,7 +14,7 @@ const ShareDoc = () => {
   // console.log(selectedDocument?.name)
 
   const fetchRequestHistory = (aadhar) => {
-    fetch(`http://localhost:3001/getRequestHistory/${aadhar}`)
+    fetch(`${baseURL}/getRequestHistory/${aadhar}`)
       .then((response) => response.json())
       .then((data) => {
         setRequestHistory(data);
@@ -31,7 +32,7 @@ const ShareDoc = () => {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:3001/users")
+    fetch(`${baseURL}/users`)
       .then((response) => response.json())
       .then((res) => {
         setUsers(res);
@@ -44,7 +45,7 @@ const ShareDoc = () => {
 
   useEffect(() => {
     if (selectedUser) {
-      fetch(`http://localhost:3001/getDocuments/${selectedUser.Aadhar}`)
+      fetch(`${baseURL}/getDocuments/${selectedUser.Aadhar}`)
         .then((response) => response.json())
         .then((data) => {
           setUserDocuments(data);
@@ -74,7 +75,7 @@ const ShareDoc = () => {
         documentName: selectedDocument.name,
       };
 
-      fetch("http://localhost:3001/requestAccess", {
+      fetch(`${baseURL}/requestAccess`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -98,7 +99,7 @@ const ShareDoc = () => {
     requesterAadhar,
     documentId
   ) => {
-    fetch(`http://localhost:3001/updateRequestStatus/${requestId}`, {
+    fetch(`${baseURL}/updateRequestStatus/${requestId}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -115,7 +116,7 @@ const ShareDoc = () => {
             documentId: documentId,
           };
 
-          fetch("http://localhost:3001/storeApprovedRequest", {
+          fetch(`${baseURL}/storeApprovedRequest`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -144,13 +145,14 @@ const ShareDoc = () => {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredUsers, setFilteredUsers] = useState([]);
+  const [usersToShow, setUsersToShow] = useState(4);
   useEffect(() => {
     const filtered = users.filter((user) =>
       user.fullName.toLowerCase().includes(searchQuery.toLowerCase())
     );
-    setFilteredUsers(filtered.slice(0, 4));
+    setFilteredUsers(filtered.slice(0, usersToShow));
     // console.log(filtered);
-  }, [searchQuery, users]);
+  }, [searchQuery, users, usersToShow]);
 
   const handleSearchInputChange = (event) => {
     setSearchQuery(event.target.value);
@@ -188,14 +190,14 @@ const ShareDoc = () => {
                   </li>
                 )
             )}
-            {/* {users.length > 4 && (
+            {users.length > 4 && (
               <button
                 className="text-white mt-2 bg-[#515863] p-2 rounded-md"
                 onClick={() => setUsersToShow(usersToShow + 4)}
               >
                 Load More
               </button>
-            )} */}
+            )}
           </ul>
         </div>
       </div>

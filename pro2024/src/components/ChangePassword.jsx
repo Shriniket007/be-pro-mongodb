@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import logos from "../images/logo1.png";
+import { baseURL } from "../App";
 
 const ChangePassword = () => {
   const user = useSelector((state) => state.usersReducer.user);
@@ -19,14 +20,11 @@ const ChangePassword = () => {
     }
 
     try {
-      const response = await axios.post(
-        "http://localhost:3001/change-password",
-        {
-          Aadhar: user.Aadhar,
-          oldPassword,
-          newPassword,
-        }
-      );
+      const response = await axios.post(`${baseURL}/change-password`, {
+        Aadhar: user.Aadhar,
+        oldPassword,
+        newPassword,
+      });
       console.log(response.data);
       alert("Password changes successfully!");
     } catch (error) {
@@ -71,7 +69,9 @@ const ChangePassword = () => {
             Change Password
           </button>
           {errorMessage && (
-            <div className="mt-4 text-red-500 text-sm">{errorMessage}</div>
+            <div className="mt-4 bg-red-500 text-white p-4 rounded-2xl text-sm">
+              {errorMessage}
+            </div>
           )}
         </div>
       </div>

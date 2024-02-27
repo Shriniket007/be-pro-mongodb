@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import axios from "axios";
 import { setUserInfo } from "../redux/Users";
 import logos from "../images/logo1.png";
+import { baseURL } from "../App";
 
 function Login() {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ function Login() {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:3001/login", {
+      const response = await axios.post(`${baseURL}/login`, {
         Aadhar: aadharNumber,
         Password: password,
       });

@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import aadhar from "../../src/images/aadhaar_pro.svg";
 import gmail from "../../src/images/gmail.svg";
 import phone from "../../src/images/phone.svg";
+import { baseURL } from "../App";
 
 const GetDoc = () => {
   const [selectedDocument, setSelectedDocument] = useState(null);
@@ -12,14 +13,14 @@ const GetDoc = () => {
   const user = useSelector((state) => state.usersReducer.user);
 
   useEffect(() => {
-    fetch(`http://localhost:3001/getDocuments/${user.Aadhar}`)
+    fetch(`${baseURL}/getDocuments/${user.Aadhar}`)
       .then((response) => response.json())
       .then((data) => {
         setDocumentList(data);
       })
       .catch((error) => setError(error.message));
 
-    fetch("http://localhost:3001/getApprovedDocuments")
+    fetch(`${baseURL}/getApprovedDocuments`)
       .then((response) => response.json())
       .then((data) => {
         const userApprovedDocuments = data.filter(

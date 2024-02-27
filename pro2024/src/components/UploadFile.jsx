@@ -2,6 +2,7 @@
 import React, { useRef, useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { baseURL } from "../App";
 
 function UploadFile() {
   const user = useSelector((state) => state.usersReducer.user);
@@ -55,7 +56,7 @@ function UploadFile() {
       const file = fileInputRef.current.files[0];
       const fileSizeKB = file.size / 1000;
 
-      const response = await axios.post("http://localhost:3001/uploadToIpfs", {
+      const response = await axios.post(`${baseURL}/uploadToIpfs`, {
         fileContent,
         userAadhar: user.Aadhar,
         fileName,

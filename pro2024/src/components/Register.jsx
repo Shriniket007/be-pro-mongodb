@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUserInfo } from "../redux/Users";
+import { baseURL } from "../App";
 
 function Register() {
   const dispatch = useDispatch();
@@ -23,10 +24,7 @@ function Register() {
 
   const handleClick = async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:3001/register",
-        userProfile
-      );
+      const response = await axios.post(`${baseURL}/register`, userProfile);
 
       if (response.data.success) {
         alert("Registration Successful");

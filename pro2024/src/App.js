@@ -44,44 +44,4 @@ function App() {
 
 export default App;
 
-// import React from 'react';
-// import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-// import Navbar from './components/Navbar';
-// import Navbar1 from './components/Navbar1';
-// import Home from './components/Home';
-// import AboutUs from './components/AboutUs';
-// import Footer from './components/Footer';
-// import Login from './components/Login';
-// import UploadFile from './components/UploadFile';
-// import Register from './components/Register';
-// import ShareDoc from './components/ShareDoc';
-// import GetDoc from './components/GetDoc';
-
-// function App() {
-//   const isLoggedIn = true;  // Set this dynamically based on user login status
-
-//   return (
-//     <Router>
-//       <div className="flex flex-col min-h-screen">
-//         <div className="flex-grow">
-//           {/* Conditionally render Navbar or Navbar1 based on login status */}
-//           {isLoggedIn ? <Navbar1 /> : <Navbar />}
-
-//           <Routes>
-//             {/* Use a dynamic route for the Home page */}
-//             <Route path="/" element={isLoggedIn ? <AboutUs /> : <Home />} />
-//             <Route path="/login" element={<Login />} />
-//             <Route path="/register" element={<Register />} />
-//             <Route path="/UploadFile" element={<UploadFile />} />
-//             <Route path="/get_docs" element={<GetDoc />} />
-//             <Route path="/share_docs" element={<ShareDoc />} />
-
-//           </Routes>
-//         </div>
-//         <Footer />
-//       </div>
-//     </Router>
-//   );
-// }
-
-// export default App;
+export const baseURL = "http://localhost:3001";
