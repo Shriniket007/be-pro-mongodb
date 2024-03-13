@@ -9,6 +9,10 @@ const GetDoc = () => {
   const [selectedDocument, setSelectedDocument] = useState(null);
   const [documentList, setDocumentList] = useState([]);
   const [approvedDocuments, setApprovedDocuments] = useState([]);
+
+  const [password, setPassword] = useState(""); // State to store user input password
+  const [showPasswordInput, setShowPasswordInput] = useState(false);
+
   const [error, setError] = useState(null);
   const user = useSelector((state) => state.usersReducer.user);
 
@@ -35,7 +39,34 @@ const GetDoc = () => {
 
   const handleDocumentSelect = (document) => {
     setSelectedDocument(document);
+    setShowPasswordInput(
+      approvedDocuments.some((doc) => doc.documentId === document)
+    ); // Show password input when document is selected
     // console.log(document)
+  };
+
+  const handlePasswordSubmit = async () => {
+    try {
+      const response = await fetch(`${baseURL}/verifyPassword`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ aadhar: user.Aadhar, password }),
+      });
+      const data = await response.json();
+      if (data.success) {
+        // Password is correct, proceed to preview document
+        setShowPasswordInput(false); // Hide password input after successful verification
+
+        setSelectedDocument(selectedDocument);
+      } else {
+        // Password is incorrect
+        setError("Incorrect password");
+      }
+    } catch (error) {
+      setError("Error verifying password");
+    }
   };
 
   const calculateFilType = (file) => {
@@ -57,7 +88,7 @@ const GetDoc = () => {
   };
 
   return (
-    <div className="grid grid-cols-10 gap-4 h-fit pt-4 pb-4 bg-[#1A2027]">
+    <div className="md:grid md:grid-cols-10 gap-4 h-fit pt-4 pb-4 bg-[#1A2027] flex flex-col">
       {/* User Profile */}
       <div className="row-span-3 col-span-3 h-fit p-2 bg-[#222831] text-[#EEEEEE] rounded-md">
         <div className=" bg-[#00ADB5] rounded-md font-bold p-2 mb-2">
@@ -116,11 +147,44 @@ const GetDoc = () => {
       </div>
 
       {/* Document Preview */}
-      <div className="row-span-4 col-span-4 h-500 p-2 bg-[#222831] text-[#EEEEEE] font-bold">
+      {/* <div className="row-span-4 col-span-4 h-500 p-2 bg-[#222831] text-[#EEEEEE] font-bold">
         <div className=" bg-[#00ADB5] rounded-md font-bold p-2 mb-2">
           <h1 className=" font-bold">Document Preview</h1>
         </div>
         {selectedDocument && (
+          <iframe
+            src={selectedDocument.ipfsPath}
+            title="Document Preview"
+            width="100%"
+            height="85%"
+            style={{ border: "none" }}
+            scrolling="auto"
+          ></iframe>
+        )}
+      </div> */}
+
+      <div className="row-span-4 col-span-4 h-500 p-2 bg-[#222831] text-[#EEEEEE] font-bold">
+        <div className=" bg-[#00ADB5] rounded-md font-bold p-2 mb-2">
+          <h1 className=" font-bold">Document Preview</h1>
+        </div>
+        {showPasswordInput && (
+          <div style={{ textAlign: "center" }}>
+            <input
+              type="password"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              style={{
+                padding: "10px",
+                marginBottom: "10px",
+                width: "100%", // Ensure the input takes full width
+              }}
+            />
+            <button onClick={handlePasswordSubmit}>Submit</button>
+            {error && <p style={{ color: "red" }}>{error}</p>}
+          </div>
+        )}
+        {selectedDocument && !showPasswordInput && (
           <iframe
             src={selectedDocument.ipfsPath}
             title="Document Preview"
@@ -156,7 +220,7 @@ const GetDoc = () => {
             <li
               key={doc.documentId.aadhar} // Use a unique key
               onClick={() => handleDocumentSelect(doc.documentId)}
-              className=" cursor-pointer bg-[#393E46] p-2 rounded-md"
+              className="cursor-pointer bg-[#393E46] p-2 rounded-md"
             >
               {doc.documentId.name} {/* Display document name */}
             </li>

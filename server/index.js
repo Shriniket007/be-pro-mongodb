@@ -3,6 +3,7 @@ const cors = require("cors");
 const bcrypt = require("bcrypt");
 const Moralis = require("moralis").default;
 const mongoose = require("mongoose");
+const nodemailer = require("nodemailer");
 const User = require("./models/User");
 const DocumentPath = require("./models/DocumentPath");
 const DocumentAccessRequest = require("./models/DocumentAccessRequest");
@@ -41,7 +42,6 @@ const connectDB = async () => {
 app.post("/register", async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.Password, 10);
-
     const user = new User({
       fullName: req.body.fullName,
       Email: req.body.Email,
@@ -109,6 +109,32 @@ app.post("/change-password", async (req, res) => {
   }
 });
 
+app.post("/verifyPassword", async (req, res) => {
+  const { aadhar, password } = req.body;
+
+  try {
+    // Fetch user details from the database based on Aadhar
+    const user = await User.findOne({ Aadhar: aadhar });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Compare the provided password with the stored hashed password
+    const match = await bcrypt.compare(password, user.Password);
+
+    if (!match) {
+      return res.json({ success: false });
+    }
+
+    // Password is correct
+    res.json({ success: true });
+  } catch (error) {
+    console.error("Error verifying password:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 app.post("/uploadToIpfs", async (req, res) => {
   const fileContent = req.body.fileContent;
   const fileSizeKB = req.body.fileSizeKB;
@@ -169,31 +195,31 @@ app.get("/documentPaths", async (req, res) => {
   }
 });
 
-app.post("/requestAccess", async (req, res) => {
-  const {
-    requesterAadhar,
-    documentId,
-    ownerAadhar,
-    requestName,
-    documentName,
-  } = req.body;
+// app.post("/requestAccess", async (req, res) => {
+//   const {
+//     requesterAadhar,
+//     documentId,
+//     ownerAadhar,
+//     requestName,
+//     documentName,
+//   } = req.body;
 
-  try {
-    const request = new DocumentAccessRequest({
-      requesterAadhar,
-      documentId,
-      ownerAadhar,
-      requestName,
-      documentName,
-    });
-    await request.save();
+//   try {
+//     const request = new DocumentAccessRequest({
+//       requesterAadhar,
+//       documentId,
+//       ownerAadhar,
+//       requestName,
+//       documentName,
+//     });
+//     await request.save();
 
-    res.json({ success: true });
-  } catch (error) {
-    console.error("Error inserting access request:", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
+//     res.json({ success: true });
+//   } catch (error) {
+//     console.error("Error inserting access request:", error);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
 
 app.get("/getRequestHistory/:aadhar", async (req, res) => {
   const aadhar = req.params.aadhar;
@@ -257,6 +283,168 @@ app.get("/getApprovedDocuments", async (req, res) => {
     res.json(approvedDocuments);
   } catch (error) {
     console.error("Error fetching approved documents:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+// Create a Nodemailer transporter using SMTP
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com", // Your SMTP server hostname
+  port: 587, // Your SMTP server port
+  secure: false, // Use TLS
+  auth: {
+    user: "cryptdrive43@gmail.com", // Your email address
+    pass: "nfvn vhcu unad bqvg    ", // Your email password
+  },
+  tls: {
+    rejectUnauthorized: false, // Ignore certificate verification
+  },
+});
+
+// Check if the transporter is ready
+transporter.verify(function (error, success) {
+  if (error) {
+    console.error("Unable to connect to the SMTP server:", error);
+  } else {
+    console.log("SMTP server connection is ready");
+  }
+});
+
+// Modify your requestAccess endpoint to send email notifications
+app.post("/requestAccess", async (req, res) => {
+  const {
+    requesterAadhar,
+    documentId,
+    ownerAadhar,
+    requestName,
+    documentName,
+  } = req.body;
+
+  try {
+    const request = new DocumentAccessRequest({
+      requesterAadhar,
+      documentId,
+      ownerAadhar,
+      requestName,
+      documentName,
+    });
+    await request.save();
+
+    // Fetch the owner's details from the database based on their Aadhar
+    const owner = await User.findOne({ Aadhar: ownerAadhar });
+
+    if (!owner) {
+      return res.status(404).json({ error: "Owner not found" });
+    }
+
+    // Send email notification to owner
+    const mailOptions = {
+      from: "cryptdrive43@gmail.com", // Sender address
+      to: owner.Email, // Recipient address (owner's email)
+      subject: "New Document Access Request",
+      html: `
+      <html>
+  <head>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      }
+      .header {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      .header h2 {
+        color: #333333;
+        font-weight: bold;
+        margin: 0;
+      }
+      .body {
+        margin-bottom: 20px;
+      }
+      .body p {
+        color: #666666;
+        font-size: 16px;
+        line-height: 1.6;
+      }
+      .button-container {
+        text-align: center;
+      }
+      .button {
+        display: inline-block;
+        padding: 12px 24px;
+        background-color: #4caf50;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+      }
+      .button:hover {
+        background-color: #45a049;
+      }
+      .footer {
+        text-align: center;
+        color: #888888;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h2>New Document Access Request</h2>
+      </div>
+      <div class="body">
+        <p>Hello,</p>
+        <p>
+          You have received a new document access request from
+          <strong>${requestName}</strong> for the document
+          <strong>${documentName}</strong>.
+        </p>
+        <p>Please review the request and take appropriate action.</p>
+        <!-- Button container -->
+        <div class="button-container">
+          <!-- Anchor tag for the button -->
+          <a
+            style="color: #ffffff"
+            href="https://crypt-drive.vercel.app"
+            class="button"
+            >Approve Request</a
+          >
+        </div>
+      </div>
+      <div class="footer">
+        <p>Thank you,</p>
+        <p>Crypt Drive Team</p>
+      </div>
+    </div>
+  </body>
+</html>
+ 
+  `,
+    };
+
+    // Send email using Nodemailer
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.error("Error sending email:", error);
+      } else {
+        console.log("Email sent:", info.response);
+      }
+    });
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error("Error inserting access request:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });

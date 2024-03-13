@@ -69,7 +69,7 @@ function UploadFile() {
   };
 
   return (
-    <div className="grid grid-cols-10 gap-4 h-screen pt-4 pb-4 bg-[#1A2027]">
+    <div className="md:grid md:grid-cols-10 gap-4 h-screen pt-4 pb-4 bg-[#1A2027] flex flex-col">
       <div className="col-span-5 h-500 p-2 bg-[#1A2027] text-[#222831] shadow-md flex flex-col justify-center items-center ">
         <h1 className="text-white text-lg font-bold mb-4">Upload Document</h1>
         <button

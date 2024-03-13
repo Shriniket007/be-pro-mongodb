@@ -164,8 +164,8 @@ const ShareDoc = () => {
   // }, [users, usersToShow]);
 
   return (
-    <div className="flex h-fit bg-[#1A2027]">
-      <div className="w-1/3 p-8 border-r border-gray-600">
+    <div className="md:grid md:grid-cols-9 gap-4 h-fit pt-4 pb-4 bg-[#1A2027] flex flex-col">
+      <div className="row-span-3 col-span-3 h-fit p-2 bg-[#222831] text-[#EEEEEE] rounded-md">
         <div className=" bg-[#00ADB5] rounded-md font-bold p-2 mb-2">
           <h1 className=" font-bold text-white">Users</h1>
         </div>
@@ -190,18 +190,18 @@ const ShareDoc = () => {
                   </li>
                 )
             )}
-            {users.length > 4 && (
-              <button
-                className="text-white mt-2 bg-[#515863] p-2 rounded-md"
-                onClick={() => setUsersToShow(usersToShow + 4)}
-              >
-                Load More
-              </button>
-            )}
+            {/* {users.length > 4 && (
+            <button
+              className="text-white mt-2 bg-[#515863] p-2 rounded-md"
+              onClick={() => setUsersToShow(usersToShow + 4)}
+            >
+              Load More
+            </button>
+          )} */}
           </ul>
         </div>
       </div>
-      <div className="w-1/3 p-8 border-r border-l border-gray-600">
+      <div className="row-span-3 col-span-3 h-fit p-2 bg-[#222831] text-[#EEEEEE] rounded-md">
         <div className="text-white bg-[#00ADB5] rounded-md font-bold p-2 mb-2">
           <h1 className=" font-bold">User Documents</h1>
         </div>
@@ -217,7 +217,7 @@ const ShareDoc = () => {
           ))}
         </ul>
       </div>
-      <div className="flex flex-col p-8 w-1/3 border-l border-gray-600">
+      <div className="row-span-3 col-span-3 h-fit p-2 bg-[#222831] text-[#EEEEEE] rounded-md">
         <div className="text-white bg-[#00ADB5] rounded-md font-bold p-2 mb-2">
           <h1 className=" font-bold">Document requests</h1>
         </div>
