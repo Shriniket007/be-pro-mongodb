@@ -14,10 +14,6 @@ function Navbar1() {
     dispatch(userSignOut());
   };
 
-  const handleChnagePassword = () => {
-    navigate("#");
-  };
-
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!isMobileMenuOpen);
   };
@@ -77,11 +73,8 @@ function Navbar1() {
           )}
           {/* Right side buttons */}
           <div className="flex items-center space-x-4">
-            <Link to="#">
-              <button
-                className="bg-[#00ADB5] text-[#EEEEEE] font-bold px-4 py-2 rounded"
-                onClick={handleChnagePassword}
-              >
+            <Link to="/changepassword">
+              <button className="bg-[#00ADB5] text-[#EEEEEE] font-bold px-4 py-2 rounded">
                 Change Password
               </button>
             </Link>

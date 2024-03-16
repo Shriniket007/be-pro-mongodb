@@ -168,22 +168,24 @@ const GetDoc = () => {
           <h1 className=" font-bold">Document Preview</h1>
         </div>
         {showPasswordInput && (
-          <div style={{ textAlign: "center" }}>
+          <div className="text-center">
             <input
               type="password"
               placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              style={{
-                padding: "10px",
-                marginBottom: "10px",
-                width: "100%", // Ensure the input takes full width
-              }}
+              className="p-4 mb-4 w-full border rounded"
             />
-            <button onClick={handlePasswordSubmit}>Submit</button>
-            {error && <p style={{ color: "red" }}>{error}</p>}
+            <button
+              onClick={handlePasswordSubmit}
+              className="bg-[#00ADB5] text-white px-4 py-2 rounded"
+            >
+              Submit
+            </button>
+            {error && <p className="text-red-500">{error}</p>}
           </div>
         )}
+
         {selectedDocument && !showPasswordInput && (
           <iframe
             src={selectedDocument.ipfsPath}
