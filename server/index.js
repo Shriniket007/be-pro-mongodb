@@ -10,6 +10,98 @@ const DocumentAccessRequest = require("./models/DocumentAccessRequest");
 const ApprovedRequest = require("./models/ApprovedRequest");
 require("dotenv").config();
 
+// const contractAbi = [
+//   {
+//     inputs: [
+//       {
+//         internalType: "uint256",
+//         name: "aadhar",
+//         type: "uint256",
+//       },
+//     ],
+//     name: "getAllDocuments",
+//     outputs: [
+//       {
+//         components: [
+//           {
+//             internalType: "uint256",
+//             name: "userAadhar",
+//             type: "uint256",
+//           },
+//           {
+//             internalType: "string",
+//             name: "fileName",
+//             type: "string",
+//           },
+//           {
+//             internalType: "string",
+//             name: "ipfsPath",
+//             type: "string",
+//           },
+//         ],
+//         internalType: "struct MyContract.Document[]",
+//         name: "",
+//         type: "tuple[]",
+//       },
+//     ],
+//     stateMutability: "view",
+//     type: "function",
+//   },
+//   {
+//     inputs: [],
+//     name: "getAllValues",
+//     outputs: [
+//       {
+//         components: [
+//           {
+//             internalType: "uint256",
+//             name: "userAadhar",
+//             type: "uint256",
+//           },
+//           {
+//             internalType: "string",
+//             name: "fileName",
+//             type: "string",
+//           },
+//           {
+//             internalType: "string",
+//             name: "ipfsPath",
+//             type: "string",
+//           },
+//         ],
+//         internalType: "struct MyContract.Document[]",
+//         name: "",
+//         type: "tuple[]",
+//       },
+//     ],
+//     stateMutability: "view",
+//     type: "function",
+//   },
+//   {
+//     inputs: [
+//       {
+//         internalType: "uint256",
+//         name: "aadhar",
+//         type: "uint256",
+//       },
+//       {
+//         internalType: "string",
+//         name: "fileName",
+//         type: "string",
+//       },
+//       {
+//         internalType: "string",
+//         name: "ipfsPath",
+//         type: "string",
+//       },
+//     ],
+//     name: "storeDocument",
+//     outputs: [],
+//     stateMutability: "nonpayable",
+//     type: "function",
+//   },
+// ];
+
 Moralis.start({
   apiKey: process.env.MORALIS_KEY,
 });
@@ -41,6 +133,11 @@ const connectDB = async () => {
 
 app.post("/register", async (req, res) => {
   try {
+    const existingUser = await User.findOne({ Aadhar: req.body.Aadhar });
+    if (existingUser) {
+      return res.json({ error: "User with this Aadhar number already exists" });
+    }
+
     const hashedPassword = await bcrypt.hash(req.body.Password, 10);
     const user = new User({
       fullName: req.body.fullName,
@@ -138,6 +235,8 @@ app.post("/verifyPassword", async (req, res) => {
 app.post("/uploadToIpfs", async (req, res) => {
   const fileContent = req.body.fileContent;
   const fileSizeKB = req.body.fileSizeKB;
+  const fileName = req.body.fileName;
+  const userAadhar = req.body.userAadhar;
 
   const fileUpload = [
     {
@@ -153,7 +252,22 @@ app.post("/uploadToIpfs", async (req, res) => {
 
     const ipfsPath = ipfsResponse.result[0].path;
 
-    console.log("Received fileName:", req.body.fileName);
+    console.log("Received fileName:", fileName);
+
+    // const provider = new ethers.providers.JsonRpcProvider(process.env.API_URL);
+    // const signer = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
+    // const StorageContract = new ethers.Contract(
+    //   process.env.contractAddress,
+    //   contractAbi,
+    //   signer
+    // );
+
+    // const result = await StorageContract.storeDocument(
+    //   userAadhar,
+    //   fileName,
+    //   ipfsPath
+    // );
+    // await result.wait();
 
     const documentPath = new DocumentPath({
       aadhar: req.body.userAadhar,
@@ -183,6 +297,28 @@ app.get("/getDocuments/:aadhar", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+// app.get("/getSmartContractDocuments/:aadhar", async (req, res) => {
+//   const aadhar = req.params.aadhar;
+//   console.log(aadhar);
+//   const provider = new ethers.providers.JsonRpcProvider(process.env.API_URL);
+//   const signer = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
+//   const StorageContract = new ethers.Contract(
+//     process.env.contractAddress,
+//     contractAbi,
+//     signer
+//   );
+
+//   try {
+//     const documents = await StorageContract.getAllDocuments(aadhar);
+//     // console.log(documents);
+
+//     res.json({ documents });
+//   } catch (error) {
+//     console.error("Error fetching documents from smart contract:", error);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
 
 app.get("/documentPaths", async (req, res) => {
   try {

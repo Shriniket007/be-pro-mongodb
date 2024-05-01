@@ -35,6 +35,14 @@ const GetDoc = () => {
         // console.log(userApprovedDocuments[0].documentId.ipfsPath)
       })
       .catch((error) => setError(error.message));
+
+    // fetch(`${baseURL}/getSmartContractDocuments/${user.Aadhar}`)
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     console.log(data);
+    //     // setDocumentList(data);
+    //   })
+    //   .catch((error) => setError(error.message));
   }, [user.Aadhar]);
 
   const handleDocumentSelect = (document) => {
