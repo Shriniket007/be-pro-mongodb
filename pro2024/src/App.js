@@ -44,5 +44,5 @@ function App() {
 
 export default App;
 
-export const baseURL = "http://localhost:3001";
-// export const baseURL = "https://crypt-drive.cyclic.app";
+// export const baseURL = "http://localhost:3001";
+export const baseURL = "https://crypt-drive.cyclic.app";
