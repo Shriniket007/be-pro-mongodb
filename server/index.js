@@ -9,6 +9,7 @@ const DocumentPath = require("./models/DocumentPath");
 const DocumentAccessRequest = require("./models/DocumentAccessRequest");
 const ApprovedRequest = require("./models/ApprovedRequest");
 require("dotenv").config();
+// const { ethers } = require("ethers");
 
 // const contractAbi = [
 //   {
