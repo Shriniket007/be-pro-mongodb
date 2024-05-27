@@ -91,7 +91,7 @@ function Navbar1() {
       </nav>
 
       {isMobileMenuOpen && (
-        <div className="backdrop-blur-md p-2 absolute top-full left-0 right-0 flex flex-col">
+        <div className="backdrop-blur-md p-2 absolute top-full left-0 right-0 flex flex-col z-50">
           {/* Mobile Menu Buttons */}
           <div className="backdrop-blur-md p-4 flex flex-col items-center">
             {user && (
