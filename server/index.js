@@ -9,106 +9,110 @@ const DocumentPath = require("./models/DocumentPath");
 const DocumentAccessRequest = require("./models/DocumentAccessRequest");
 const ApprovedRequest = require("./models/ApprovedRequest");
 require("dotenv").config();
-// const { ethers } = require("ethers");
+const { ethers } = require("ethers");
 
-// const contractAbi = [
-//   {
-//     inputs: [
-//       {
-//         internalType: "uint256",
-//         name: "aadhar",
-//         type: "uint256",
-//       },
-//     ],
-//     name: "getAllDocuments",
-//     outputs: [
-//       {
-//         components: [
-//           {
-//             internalType: "uint256",
-//             name: "userAadhar",
-//             type: "uint256",
-//           },
-//           {
-//             internalType: "string",
-//             name: "fileName",
-//             type: "string",
-//           },
-//           {
-//             internalType: "string",
-//             name: "ipfsPath",
-//             type: "string",
-//           },
-//         ],
-//         internalType: "struct MyContract.Document[]",
-//         name: "",
-//         type: "tuple[]",
-//       },
-//     ],
-//     stateMutability: "view",
-//     type: "function",
-//   },
-//   {
-//     inputs: [],
-//     name: "getAllValues",
-//     outputs: [
-//       {
-//         components: [
-//           {
-//             internalType: "uint256",
-//             name: "userAadhar",
-//             type: "uint256",
-//           },
-//           {
-//             internalType: "string",
-//             name: "fileName",
-//             type: "string",
-//           },
-//           {
-//             internalType: "string",
-//             name: "ipfsPath",
-//             type: "string",
-//           },
-//         ],
-//         internalType: "struct MyContract.Document[]",
-//         name: "",
-//         type: "tuple[]",
-//       },
-//     ],
-//     stateMutability: "view",
-//     type: "function",
-//   },
-//   {
-//     inputs: [
-//       {
-//         internalType: "uint256",
-//         name: "aadhar",
-//         type: "uint256",
-//       },
-//       {
-//         internalType: "string",
-//         name: "fileName",
-//         type: "string",
-//       },
-//       {
-//         internalType: "string",
-//         name: "ipfsPath",
-//         type: "string",
-//       },
-//     ],
-//     name: "storeDocument",
-//     outputs: [],
-//     stateMutability: "nonpayable",
-//     type: "function",
-//   },
-// ];
+const contractAbi = [
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "aadhar",
+        type: "uint256",
+      },
+    ],
+    name: "getAllDocuments",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "userAadhar",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "fileName",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "ipfsPath",
+            type: "string",
+          },
+        ],
+        internalType: "struct MyContract.Document[]",
+        name: "",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getAllValues",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "userAadhar",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "fileName",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "ipfsPath",
+            type: "string",
+          },
+        ],
+        internalType: "struct MyContract.Document[]",
+        name: "",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "aadhar",
+        type: "uint256",
+      },
+      {
+        internalType: "string",
+        name: "fileName",
+        type: "string",
+      },
+      {
+        internalType: "string",
+        name: "ipfsPath",
+        type: "string",
+      },
+    ],
+    name: "storeDocument",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+];
 
 Moralis.start({
   apiKey: process.env.MORALIS_KEY,
 });
 
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
@@ -255,20 +259,20 @@ app.post("/uploadToIpfs", async (req, res) => {
 
     console.log("Received fileName:", fileName);
 
-    // const provider = new ethers.providers.JsonRpcProvider(process.env.API_URL);
-    // const signer = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
-    // const StorageContract = new ethers.Contract(
-    //   process.env.contractAddress,
-    //   contractAbi,
-    //   signer
-    // );
+    const provider = new ethers.providers.JsonRpcProvider(process.env.API_URL);
+    const signer = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
+    const StorageContract = new ethers.Contract(
+      process.env.contractAddress,
+      contractAbi,
+      signer
+    );
 
-    // const result = await StorageContract.storeDocument(
-    //   userAadhar,
-    //   fileName,
-    //   ipfsPath
-    // );
-    // await result.wait();
+    const result = await StorageContract.storeDocument(
+      userAadhar,
+      fileName,
+      ipfsPath
+    );
+    await result.wait();
 
     const documentPath = new DocumentPath({
       aadhar: req.body.userAadhar,
@@ -588,6 +592,17 @@ app.post("/requestAccess", async (req, res) => {
 
 // app.listen(8700, () => {
 //   console.log("Connected backend");
+// });
+
+// app.post("/revokeAccess", async (req, res) => {
+//   const { docId } = req.body;
+
+//   try {
+//     await ApprovedRequest.findByIdAndDelete(docId);
+//     res.json({ message: "Document deleted successfully" });
+//   } catch (error) {
+//     res.status(500).json({ error: "Error deleting document" });
+//   }
 // });
 connectDB().then(() => {
   app.listen(3001, () => {
